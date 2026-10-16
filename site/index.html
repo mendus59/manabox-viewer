@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MTG Collection</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <h1>MTG Collection</h1>
+      <form class="search" id="search-form" role="search" onsubmit="return false">
+        <input id="q" type="search" placeholder="Search with Scryfall syntax, e.g.  t:dragon c:r mv<=5" autocomplete="off" spellcheck="false" aria-label="Search cards">
+        <div class="controls">
+          <label>Sort
+            <select id="sort">
+              <option value="name">Name</option>
+              <option value="set">Set / number</option>
+              <option value="released">Release date</option>
+              <option value="mv">Mana value</option>
+              <option value="color">Color</option>
+              <option value="rarity">Rarity</option>
+              <option value="usd">Price (USD)</option>
+              <option value="power">Power</option>
+              <option value="toughness">Toughness</option>
+              <option value="edhrec">EDHREC rank</option>
+              <option value="artist">Artist</option>
+              <option value="qty">Quantity owned</option>
+            </select>
+          </label>
+          <button type="button" id="dir" class="ghost" title="Toggle sort direction">↑ Asc</button>
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" data-view="grid" class="on">Images</button>
+            <button type="button" data-view="list">List</button>
+          </div>
+        </div>
+      </form>
+      <div class="status-row">
+        <p id="status" aria-live="polite"></p>
+        <details class="help">
+          <summary>Search help</summary>
+          <div class="help-body">
+            <p>Search works like <a href="https://scryfall.com/docs/syntax" target="_blank" rel="noopener">Scryfall</a>, but only over this collection. Combine terms with spaces (AND), <code>or</code>, parentheses, and <code>-</code> to negate. Use quotes for phrases and <code>/regex/</code> for patterns.</p>
+            <table>
+              <tr><td><code>goblin</code> <code>!"Lightning Bolt"</code></td><td>Name contains / exact name</td></tr>
+              <tr><td><code>c:rg</code> <code>c=u</code> <code>c:m</code> <code>c:c</code></td><td>Colors (at least / exactly / multicolor / colorless)</td></tr>
+              <tr><td><code>id:esper</code> <code>id&lt;=wub</code></td><td>Color identity (fits in that commander deck)</td></tr>
+              <tr><td><code>t:legendary t:creature</code></td><td>Type line</td></tr>
+              <tr><td><code>o:"draw a card"</code> <code>o:~</code> <code>fo:</code></td><td>Rules text (<code>~</code> = card name; <code>fo:</code> includes reminder text)</td></tr>
+              <tr><td><code>m:{G}{G}</code> <code>m:2WW</code></td><td>Mana cost contains symbols</td></tr>
+              <tr><td><code>mv&gt;=4</code> <code>mv:even</code></td><td>Mana value</td></tr>
+              <tr><td><code>pow&gt;=4</code> <code>tou&lt;pow</code> <code>loy:3</code> <code>pt&gt;=10</code></td><td>Power, toughness, loyalty</td></tr>
+              <tr><td><code>r:mythic</code> <code>r&gt;=rare</code></td><td>Rarity</td></tr>
+              <tr><td><code>s:woe</code> <code>cn:12</code> <code>st:commander</code></td><td>Set code, collector number, set type</td></tr>
+              <tr><td><code>f:commander</code> <code>banned:modern</code></td><td>Format legality</td></tr>
+              <tr><td><code>kw:flying</code> <code>produces:g</code></td><td>Keyword abilities, mana produced</td></tr>
+              <tr><td><code>a:"rebecca guay"</code> <code>ft:/dragon/</code> <code>wm:selesnya</code></td><td>Artist, flavor text, watermark</td></tr>
+              <tr><td><code>usd&gt;5</code> <code>year&gt;=2020</code> <code>date&lt;2010-01-01</code></td><td>Price, release year/date</td></tr>
+              <tr><td><code>is:foil</code> <code>is:commander</code> <code>is:mdfc</code> <code>is:showcase</code></td><td>Card properties (also <code>not:</code>)</td></tr>
+              <tr><td><code>qty&gt;=2</code></td><td>Copies owned (collection only)</td></tr>
+              <tr><td><code>order:usd</code> <code>dir:desc</code></td><td>Sort from the search box</td></tr>
+            </table>
+            <p class="examples">Try:
+              <button type="button" class="ex">t:legendary t:creature id:golgari</button>
+              <button type="button" class="ex">o:"draw a card" mv&lt;=2</button>
+              <button type="button" class="ex">is:foil order:usd</button>
+              <button type="button" class="ex">(t:goblin or t:elf) -c:g</button>
+            </p>
+          </div>
+        </details>
+      </div>
+      <ul id="warnings" class="warnings"></ul>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <details id="filters" class="filters" open>
+      <summary>
+        <span class="ftitle">Filters <span id="filter-count" class="count"></span></span>
+        <button type="button" id="filter-clear" class="linkish" hidden>Clear filters</button>
+      </summary>
+      <div id="filters-body" class="filters-body"></div>
+    </details>
+    <div id="results"></div>
+    <div id="sentinel"></div>
+  </main>
+
+  <footer class="wrap foot">
+    <p><span id="updated"></span> Card data and images from <a href="https://scryfall.com" target="_blank" rel="noopener">Scryfall</a>. Magic: The Gathering is © Wizards of the Coast.</p>
+  </footer>
+
+  <dialog id="card-dialog" aria-label="Card details">
+    <div class="dlg">
+      <button type="button" class="close ghost" aria-label="Close" data-close>✕</button>
+      <div class="dlg-img"></div>
+      <div class="dlg-info"></div>
+    </div>
+  </dialog>
+
+  <div id="hover-preview" aria-hidden="true"></div>
+
+  <script src="data/cards.js"></script>
+  <script src="search.js"></script>
+  <script src="filters.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

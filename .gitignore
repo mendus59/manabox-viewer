@@ -1,0 +1,7 @@
+# ManaBox exports include purchase prices and binder names; only site/data/cards.js is published.
+*.csv
+
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
