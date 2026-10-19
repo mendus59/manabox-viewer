@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths: ["site/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
+  workflow_call:  # used by prices.yml after the weekly price update
 
 permissions:
   contents: read
@@ -24,6 +25,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}  # branch tip, so a call from prices.yml gets its new commit
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

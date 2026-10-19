@@ -44,6 +44,18 @@
 
   const money = (n) => (n == null ? "" : "$" + n.toFixed(2));
   const cap = (s) => (s ? s[0].toUpperCase() + s.slice(1) : "");
+  const dollars = (n) => "$" + n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  // USD value of every copy owned, pricing each finish separately (falling back to another finish's price).
+  function ownedValue(c) {
+    const p = c.prices || {};
+    const price = (...keys) => { for (const k of keys) if (p[k]) return parseFloat(p[k]); return 0; };
+    const nonfoil = c.owned.qty - c.owned.foil - c.owned.etched;
+    return nonfoil * price("usd", "usd_foil", "usd_etched")
+      + c.owned.foil * price("usd_foil", "usd", "usd_etched")
+      + c.owned.etched * price("usd_etched", "usd_foil", "usd");
+  }
+  const totalValue = all.reduce((n, c) => n + ownedValue(c), 0);
 
   // ---------- search ----------
 
@@ -65,7 +77,7 @@
     const copies = state.results.reduce((n, c) => n + c.owned.qty, 0);
     els.status.textContent = state.results.length === all.length
       ? `${all.length.toLocaleString()} cards (${totalCopies.toLocaleString()} copies)`
-      : `${state.results.length.toLocaleString()} of ${all.length.toLocaleString()} cards (${copies.toLocaleString()} copies)`;
+      : `${state.results.length.toLocaleString()} of ${all.length.toLocaleString()} cards (${copies.toLocaleString()} copies) · ${dollars(state.results.reduce((n, c) => n + ownedValue(c), 0))}`;
 
     els.results.innerHTML = "";
     els.results.className = state.view;
@@ -270,8 +282,11 @@
 
   // ---------- start ----------
 
+  $("#total").innerHTML = `Total value <strong>${dollars(totalValue)}</strong>`;
   if (data.generated) {
-    $("#updated").textContent = `Collection updated ${new Date(data.generated).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}.`;
+    const day = (d) => new Date(d).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+    $("#updated").textContent = `Collection updated ${day(data.generated)}.`
+      + (data.prices_updated ? ` Prices updated ${day(data.prices_updated)} (highest of TCGplayer, Card Kingdom and MTGGoldfish).` : "");
   }
   const filters = Filters.init({ container: $("#filters-body"), cards: all, params, onChange: () => run() });
   els.filterClear.addEventListener("click", (e) => { e.preventDefault(); filters.clear(); });

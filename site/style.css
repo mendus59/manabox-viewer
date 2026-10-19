@@ -43,7 +43,10 @@ button { cursor: pointer; }
   border-bottom: 1px solid var(--line);
   padding: 12px 0 8px;
 }
-h1 { font-size: 1.25rem; margin: 0 0 10px; letter-spacing: 0.02em; }
+.title-row { display: flex; justify-content: space-between; align-items: baseline; gap: 4px 12px; flex-wrap: wrap; margin-bottom: 10px; }
+h1 { font-size: 1.25rem; margin: 0; letter-spacing: 0.02em; }
+.total { margin: 0; color: var(--muted); font-size: 0.9rem; }
+.total strong { color: var(--accent); font-size: 1.15rem; font-variant-numeric: tabular-nums; }
 .search { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 #q {
   flex: 1 1 420px;

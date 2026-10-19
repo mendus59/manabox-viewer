@@ -24,6 +24,14 @@ ManaBox_Collection.csv ──► build.py ──► site/data/cards.js ──►
 
 Requires Python 3.9+ and no packages. Prices are refreshed each time you build.
 
+## Prices
+
+The site's USD prices are the highest of TCGplayer market (via Scryfall), Card Kingdom near-mint retail, and MTGGoldfish paper for each finish you own.
+
+- **Weekly:** `.github/workflows/prices.yml` runs `refresh_prices.py` every Monday at 12:00 UTC, commits `site/data/cards.js`, and redeploys. It reads only the published site data, so the CSV never needs to be in the repo. Run it by hand from the **Actions** tab with **Update prices → Run workflow**.
+- **After a rebuild:** `build.py` writes Scryfall prices only, so run `python refresh_prices.py` afterwards. Add `--no-goldfish` to skip the ~15-minute MTGGoldfish scrape.
+- **For the CSV:** `python update_prices.py` writes `ManaBox_Collection_updated.csv` (same columns, with `Purchase price` set to the highest price) and `ManaBox_Collection_prices.csv` (each source's price per row).
+
 ## Viewing locally
 
 Open `site/index.html` in a browser by double-clicking it. You don't need a server.
