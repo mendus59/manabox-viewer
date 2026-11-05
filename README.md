@@ -1,5 +1,15 @@
 # MTG Collection Viewer
 
+<!-- site-summary:start -->
+<!-- This section is this project's card on https://mendus59.github.io and is copied there daily.
+     Keep it true of what's on main: one plain-text summary line (max 160 characters), then 1-6 short bullets.
+     See CLAUDE.md ("Site summary"). -->
+Share a Magic: The Gathering collection with card images and Scryfall-style search.
+
+- Turns a ManaBox export into a fast static site; all searching happens in the browser.
+- Prices refresh weekly from TCGplayer, Card Kingdom and MTGGoldfish, taking the highest for each finish.
+<!-- site-summary:end -->
+
 A static website for sharing a ManaBox collection, with card images and Scryfall-style search.
 
 ## How it works
