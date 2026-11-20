@@ -6,7 +6,7 @@ on:
     branches: [main]
     paths: ["site/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
-  workflow_call:  # used by prices.yml after the weekly price update
+  workflow_call:  # used by prices.yml after the monthly price update
 
 permissions:
   contents: read

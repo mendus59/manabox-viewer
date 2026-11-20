@@ -1,9 +1,9 @@
-# Refreshes card prices every week, commits site/data/cards.js, and redeploys the site.
+# Refreshes card prices once a month (on the 1st), commits site/data/cards.js, and redeploys the site.
 name: Update prices
 
 on:
   schedule:
-    - cron: "0 12 * * 1"  # Mondays at 12:00 UTC
+    - cron: "0 12 1 * *"  # the 1st of every month at 12:00 UTC
   workflow_dispatch:
 
 concurrency:

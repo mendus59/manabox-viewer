@@ -286,7 +286,7 @@
   if (data.generated) {
     const day = (d) => new Date(d).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
     $("#updated").textContent = `Collection updated ${day(data.generated)}.`
-      + (data.prices_updated ? ` Prices updated ${day(data.prices_updated)} (highest of TCGplayer, Card Kingdom and MTGGoldfish).` : "");
+      + (data.prices_updated ? ` Prices updated on ${day(data.prices_updated)} (highest of TCGplayer, Card Kingdom and MTGGoldfish).` : "");
   }
   const filters = Filters.init({ container: $("#filters-body"), cards: all, params, onChange: () => run() });
   els.filterClear.addEventListener("click", (e) => { e.preventDefault(); filters.clear(); });

@@ -3,7 +3,7 @@
 
 For every printing in the site data, sets prices.usd / usd_foil / usd_etched
 to the highest current price from TCGplayer (via Scryfall), Card Kingdom and
-MTGGoldfish. Only the finishes you own are checked on MTGGoldfish. The weekly
+MTGGoldfish. Only the finishes you own are checked on MTGGoldfish. The monthly
 GitHub Actions job runs this; you can also run it after build.py:
 
     python refresh_prices.py
